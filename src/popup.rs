@@ -74,11 +74,18 @@ impl Popup {
         notes_input.set_wrap_mode(gtk::WrapMode::WordChar);
         notes_input.set_accepts_tab(false);
         let hours_input = gtk::Entry::new();
+        let save_button_copy = save_button.clone();
+        hours_input.connect_changed(move |hi| {
+            if &hi.get_text().unwrap() != "" {
+                save_button_copy.set_label("Set Time");
+            } else {
+                save_button_copy.set_label("Start Timer");
+            }
+        });
         hours_input
             .set_property("activates-default", &true)
             .expect("could not allow default activation");
         hours_input.set_placeholder_text(Some("00:00"));
-
         let popup = Popup {
             window: window,
             project_chooser: Popup::project_chooser(project_assignments),
